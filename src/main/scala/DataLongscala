@@ -1,0 +1,14 @@
+import org.apache.spark.streaming.dstream.DStream
+
+object BuiltinsOnly extends Experiment[(Int, (Int, String))] {
+
+  def run(data: DStream[(Int, Data)]) = {
+    val string = data.map { p => (p._1, (p._1, p._2.toString)) }
+
+    def updateFunction(newValues: Seq[(Int, String)], current: Option[(Int, String)]): Option[(Int, String)] =
+      newValues.headOption
+
+    string.updateStateByKey(updateFunction _)
+  }
+
+}
