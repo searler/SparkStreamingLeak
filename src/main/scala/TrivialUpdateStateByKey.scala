@@ -31,15 +31,15 @@ object TrivialUpdateStateByKey extends App {
   val string = dStream.map { s =>
     val p = s.split(" ")
     val id = p(0).toInt
-    (id, (id, p(2)))
+    (id, (id, p(1)))
   }
 
   def updateFunction(newValues: Seq[(Int, String)], current: Option[(Int, String)]): Option[(Int, String)] =
     newValues.headOption
 
-  string.updateStateByKey(updateFunction _)
+  val updated = string.updateStateByKey(updateFunction _)
 
-  dStream.print
+  updated.print
 
   streamingContext.start()
   streamingContext.awaitTermination()
