@@ -3,6 +3,13 @@
 Code that illustrates resource leak related to class loaders and updateStateByKey.
 The number of classes loaded steadily increases until failure occurs. 
 
+## UPDATE 
+These problems only occur when master is local[*]. 
+
+The problem does not occur when using a local cluster
+
+## Process
+
 Start two sbt instances. 
 Run Generator in first to provide source of streaming data.
 Run one of the test programs in the other sbt
