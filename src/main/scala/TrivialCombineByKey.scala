@@ -19,7 +19,7 @@ import org.apache.spark.streaming.dstream.DStream
 object TrivialCombineByKey extends App {
 
   val conf = new SparkConf()
-    .setMaster("local[*]")
+    //.setMaster("local[*]")
     .setAppName("Example")
     .set("spark.executor.memory", "1g")
     .set("spark.cleaner.ttl", "300")
@@ -30,8 +30,13 @@ object TrivialCombineByKey extends App {
 
   streamingContext.checkpoint("/tmp/spark")
 
-  val dStream = streamingContext.socketTextStream("localhost",
+  val dStream1 = streamingContext.socketTextStream("localhost",
     12345, StorageLevel.MEMORY_AND_DISK_SER)
+    
+     val dStream2 = streamingContext.socketTextStream("localhost",
+    12345, StorageLevel.MEMORY_AND_DISK_SER)
+    
+    val dStream = dStream1.union(dStream2)
     
     type Datum = (Int,String)
 
@@ -49,8 +54,15 @@ object TrivialCombineByKey extends App {
       new HashPartitioner(4),
       true)
 
-  updated.foreachRDD(rdd => rdd.count)
+  updated.foreachRDD(rdd => {
+      rdd.foreach {
+      record => 
+      }
+      }
+     )
 
+
+ //  updated.saveAsTextFiles("data")
   streamingContext.start()
   streamingContext.awaitTermination()
 

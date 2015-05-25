@@ -15,18 +15,24 @@ import org.apache.spark.streaming.dstream.DStream
 object TrivialUpdateStateByKey extends App {
 
   val conf = new SparkConf()
-    .setMaster("local[*]")
+  //  .setMaster("local[*]")
     .setAppName("Example")
     .set("spark.executor.memory", "1g")
     .set("spark.cleaner.ttl", "300")
+    .set("spark.streaming.receiver.maxRate","400000")
     .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 
   val streamingContext = new StreamingContext(conf, Seconds(2))
 
   streamingContext.checkpoint("/tmp/spark")
 
-  val dStream = streamingContext.socketTextStream("localhost",
-    12345, StorageLevel.MEMORY_AND_DISK_SER)
+  val dStream1 = streamingContext.socketTextStream("localhost",
+    12345, StorageLevel.MEMORY_ONLY_SER)
+    
+     val dStream2 = streamingContext.socketTextStream("localhost",
+    12345, StorageLevel.MEMORY_ONLY_SER)
+    
+    val dStream=dStream1.union(dStream2)
 
   val string = dStream.map { s =>
     val p = s.split(" ")
@@ -39,7 +45,12 @@ object TrivialUpdateStateByKey extends App {
 
   val updated = string.updateStateByKey(updateFunction _)
 
-  updated.print
+  updated.foreachRDD(rdd => {
+      rdd.foreach {
+      record => 
+      }
+      }
+     )
 
   streamingContext.start()
   streamingContext.awaitTermination()
