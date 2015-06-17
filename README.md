@@ -8,6 +8,10 @@ These problems only occur when master is local[*].
 
 The problem does not occur when using a local cluster
 
+## UPDATE TWO
+
+The 1.4.0 release resolves the problem.
+
 ## Process
 
 Start two sbt instances. 
