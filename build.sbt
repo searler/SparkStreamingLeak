@@ -1,14 +1,13 @@
 name := "Spark Streaming Leak"
 
-version := "0.1"
+version := "0.2"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.10.5"
 
-libraryDependencies += "org.apache.spark" %% "spark-streaming" % "1.3.1" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-streaming" % "1.6.1" % "provided"
 
 fork in run := true
 
-//javaOptions in run += "-verbose:class"
 
 mainClass in assembly := Some("TrivialCombineByKey")
 
