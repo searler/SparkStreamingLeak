@@ -38,7 +38,8 @@ object Base {
       .setAppName("Example")
       .set("spark.executor.memory", "1g")
       .set("spark.cleaner.ttl", "300")
-      .set("spark.streaming.receiver.maxRate","100000")
+      .set("spark.streaming.receiver.maxRate","1000000")
+      .set("spark.streaming.backpressure.enabled","true")
       .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 
     conf.registerKryoClasses(Array(classOf[Data], classOf[Summation]))
