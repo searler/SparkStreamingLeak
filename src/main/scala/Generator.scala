@@ -24,7 +24,7 @@ object Generator extends App {
   class Client(val sock: Socket) extends Runnable {
 
     override def run = {
-      val os = sock.getOutputStream
+      val os = new java.io.BufferedOutputStream(sock.getOutputStream)
 
       var index = 0
 
